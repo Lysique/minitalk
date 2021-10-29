@@ -6,7 +6,7 @@
 /*   By: tamighi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 16:36:29 by tamighi           #+#    #+#             */
-/*   Updated: 2021/10/29 08:34:50 by tamighi          ###   ########.fr       */
+/*   Updated: 2021/10/29 17:07:29 by tamighi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	sig_handler(int sig, siginfo_t *info, void *context)
 	i = i / 2;
 	if (!i)
 	{
-		if (c == 0)
+		if (!c)
 		{
 			c = 10;
 			kill(info->si_pid, SIGUSR1);
@@ -54,6 +54,7 @@ void	sig_handler(int sig, siginfo_t *info, void *context)
 		c = 0;
 		i = 128;
 	}
+	usleep(75);
 	kill(info->si_pid, SIGUSR2);
 }
 
@@ -64,11 +65,12 @@ int	main(void)
 
 	sa.sa_sigaction = &sig_handler;
 	sa.sa_flags = SA_SIGINFO;
+	if (sigaction(SIGUSR1, &sa, 0))
+		return (0);
+	if (sigaction(SIGUSR2, &sa, 0))
+		return (0);
 	pid = getpid();
 	write_pid(pid);
-	sigaction(SIGUSR1, &sa, 0);
-	sigaction(SIGUSR2, &sa, 0);
 	while (1)
 		pause();
-//	pause();
 }
