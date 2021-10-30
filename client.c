@@ -6,7 +6,7 @@
 /*   By: tamighi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/25 16:28:22 by tamighi           #+#    #+#             */
-/*   Updated: 2021/10/29 17:09:32 by tamighi          ###   ########.fr       */
+/*   Updated: 2021/10/30 12:01:20 by tamighi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,10 @@ int	main(int argc, char **argv)
 	if (argc != 3)
 		return (0);
 	sa.sa_handler = &sig_handler;
-	sigaction(SIGUSR1, &sa, 0);
-	sigaction(SIGUSR2, &sa, 0);
+	if (sigaction(SIGUSR1, &sa, 0))
+		return (0);
+	if (sigaction(SIGUSR2, &sa, 0))
+		return (0);
 	pid = ft_atoi(argv[1]);
 	char_to_signal(argv[2], pid);
 }
